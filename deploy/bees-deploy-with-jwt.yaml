@@ -96,7 +96,7 @@ metadata:
   namespace: central
   selector:
     matchLabels:
-      app: service-business
+      app: bees
 spec:
   jwtRules:
   - issuer: "testing@secure.istio.io"
