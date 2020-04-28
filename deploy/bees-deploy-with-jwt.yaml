@@ -88,3 +88,16 @@ spec:
         host: bees
         port:
           number: 80
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "RequestAuthentication"
+metadata:
+  name: "jwt-bees"
+  namespace: central
+  selector:
+    matchLabels:
+      app: service-business
+spec:
+  jwtRules:
+  - issuer: "testing@secure.istio.io"
+    jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.5/security/tools/jwt/samples/jwks.json"
