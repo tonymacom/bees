@@ -33,6 +33,18 @@ public class InfoController {
 		return ResponseEntity.ok(JSON.toJSONString(result));
 	}
 
+	@GetMapping("/error/500")
+	public ResponseEntity<String> error500() throws Exception {
+		throw new Exception();
+	}
+
+	@GetMapping("/error/{status}")
+	public ResponseEntity<String> error503(@PathVariable("status")Integer status, HttpServletResponse response) throws Exception {
+		response.setStatus(status);
+		response.getWriter().write("abcd");
+		return null;
+	}
+
 	@GetMapping("/request/info")
 	public ResponseEntity<String> info(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> result = new HashMap<>();
