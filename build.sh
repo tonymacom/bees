@@ -1,0 +1,1 @@
+#!/bin/shdocker build -t itmabo/bees:v1 .docker push itmabo/bees:v1
