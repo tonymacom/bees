@@ -72,4 +72,13 @@ public class InfoController {
 		log.info("reset 0");
 		return ResponseEntity.ok("reset 0");
 	}
+
+	@GetMapping("/print_log")
+	public ResponseEntity<String> print_log() {
+		log.info("==>  Preparing: SELECT 1 from dual where 232 = ?");
+		log.info("==> Parameters: 232(Integer)");
+		log.info("<==      Total: 1");
+		return ResponseEntity.ok("reset 0");
+	}
+
 }
