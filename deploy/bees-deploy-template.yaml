@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bees
-  namespace: forest
+  name: ${DOMAIN}-${VERSION}
+  namespace: ${NAMESPACE}
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: bees
-      version: v1
+      app: ${DOMAIN}
+      version: ${VERSION}
   template:
     metadata:
       labels:
-        app: bees
-        version: v1
+        app: ${DOMAIN}
+        version: ${VERSION}
     spec:
       containers:
-      - name: bees
-        image: itmabo/bees:v1
+      - name: ${DOMAIN}
+        image: itmabo/${DOMAIN}:${VERSION}
         imagePullPolicy: Always
         ports:
         - name: main-port
@@ -51,10 +51,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: bees
-  namespace: forest
+  name: ${DOMAIN}
+  namespace: ${NAMESPACE}
   labels:
-    app: bees
+    app: ${DOMAIN}
 spec:
   ports:
   - name: http
@@ -62,7 +62,7 @@ spec:
     protocol: TCP
     targetPort: main-port
   selector:
-    app: bees
+    app: ${DOMAIN}
   type: ClusterIP
 
 ---
@@ -70,8 +70,8 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: bees
-  namespace: forest
+  name: ${DOMAIN}
+  namespace: ${NAMESPACE}
 spec:
   hosts:
   - wmsapi.ecnow.tech
@@ -80,12 +80,12 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /bees
+        prefix: /${DOMAIN}
     rewrite:
       uri: /
     route:
     - destination:
-        host: bees
+        host: ${DOMAIN}
         port:
           number: 80
 
@@ -93,10 +93,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: bees
-  namespace: forest
+  name: ${DOMAIN}
+  namespace: ${NAMESPACE}
 spec:
-  host: bees
+  host: ${DOMAIN}
   trafficPolicy:
     connectionPool:
       tcp:

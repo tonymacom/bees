@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bees
+  name: bees-v2
   namespace: forest
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: bees
-      version: v1
+      version: v2
   template:
     metadata:
       labels:
         app: bees
-        version: v1
+        version: v2
     spec:
       containers:
       - name: bees
-        image: itmabo/bees:v1
+        image: itmabo/bees:v2
         imagePullPolicy: Always
         ports:
         - name: main-port
@@ -67,27 +67,31 @@ spec:
 
 ---
 
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: bees
-  namespace: forest
-spec:
-  hosts:
-  - wmsapi.ecnow.tech
-  gateways:
-  - istio-system/ingressgateway
-  http:
-  - match:
-    - uri:
-        prefix: /bees
-    rewrite:
-      uri: /
-    route:
-    - destination:
-        host: bees
-        port:
-          number: 80
+#apiVersion: networking.istio.io/v1alpha3
+#kind: VirtualService
+#metadata:
+#  name: bees
+#  namespace: forest
+#spec:
+#  hosts:
+#  - wmsapi.ecnow.tech
+#  gateways:
+#  - istio-system/ingressgateway
+#  http:
+#  - match:
+#    - uri:
+#        prefix: /bees
+#    rewrite:
+#      uri: /
+#    route:
+#    - destination:
+#        host: bees
+#        subset: v1
+#      weight: 100
+#    - destination:
+#        host: bees
+#        subset: v2
+#      weight: 0
 
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -108,3 +112,10 @@ spec:
       consecutive5xxErrors: 6
       interval: 5s
       baseEjectionTime: 5s
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
