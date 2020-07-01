@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${DOMAIN}-${VERSION}
+  name: ${DOMAIN}
   namespace: ${NAMESPACE}
 spec:
   replicas: 3
