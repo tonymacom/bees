@@ -24,6 +24,9 @@ spec:
         volumeMounts:
         - mountPath: /home/log
           name: log-volume
+        env:
+        - name: VERSION
+          value: ${VERSION}
         livenessProbe:
           httpGet:
             path: /actuator/info
