@@ -53,6 +53,7 @@ pipeline{
 
                     envsubst < deploy/bees-deploy-template.yaml|kubectl apply -f -
                 """
+                }
             }
         }
     }
