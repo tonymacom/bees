@@ -51,7 +51,11 @@ pipeline{
 					export DOMAIN=${DOMAIN}
 					export NAMESPACE=${NAMESPACE}
 
-                    envsubst < deploy/bees-deploy-template.yaml|kubectl apply -f -
+                    envsubst < deploy/bees-deploy-template.yaml > deploy.yaml
+                    echo "cat deploy.yaml --->>>"
+                    cat deploy.yaml
+                    echo "cat deploy.yaml ---<<<"
+                    kubectl apply -f deploy.yaml
                 """
                 }
             }

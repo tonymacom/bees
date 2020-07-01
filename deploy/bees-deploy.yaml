@@ -8,7 +8,6 @@ spec:
   selector:
     matchLabels:
       app: bees
-      version: v1
   template:
     metadata:
       labels:

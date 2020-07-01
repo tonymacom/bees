@@ -8,7 +8,6 @@ spec:
   selector:
     matchLabels:
       app: ${DOMAIN}
-      version: ${VERSION}
   template:
     metadata:
       labels:

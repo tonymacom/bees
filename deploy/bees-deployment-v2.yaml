@@ -1,0 +1,48 @@
+# 测试spec.selector.matchLabels下如有version 这个label匹配的话，不能使用同一个deploy name 滚动发布。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bees
+  namespace: forest
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bees
+  template:
+    metadata:
+      labels:
+        app: bees
+        version: v2
+    spec:
+      containers:
+      - name: bees
+        image: itmabo/bees:v2
+        imagePullPolicy: Always
+        ports:
+        - name: main-port
+          containerPort: 8080
+        volumeMounts:
+        - mountPath: /home/log
+          name: log-volume
+        livenessProbe:
+          httpGet:
+            path: /actuator/info
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 3
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/info
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 3
+          successThreshold: 1
+          failureThreshold: 5
+      volumes:
+      - name: log-volume
+        hostPath:
+          path: /home/log
+          type: DirectoryOrCreate
