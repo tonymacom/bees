@@ -4,13 +4,7 @@ pipeline{
         DOMAIN = "bees";
     }
     parameters {
-        gitParameter name: 'Version',
-                     type: 'PT_TAG',
-                     branchFilter: 'origin/(.*)',
-                     defaultValue: 'latest',
-                     selectedValue: 'DEFAULT',
-                     sortMode: 'DESCENDING_SMART',
-                     description: 'Select your release tag.'
+        string(name: 'Version', defaultValue: 'latest', description: 'release version')
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
     }
     stages {
