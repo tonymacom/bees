@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        DOCKER_HUB = "itmabo"
+        DOMAIN = "bees";
     }
     parameters {
         gitParameter name: 'Version',
@@ -10,19 +10,19 @@ pipeline{
                      defaultValue: 'latest',
                      selectedValue: 'DEFAULT',
                      sortMode: 'DESCENDING_SMART',
-                     description: 'Select your branch or tag.'
-        string(name: 'Domain', defaultValue: 'bees', description: 'Domain Name')
+                     description: 'Select your release tag.'
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
     }
     stages {
         stage('Build') {
             environment {
-                IMAGE_NAME = "${env.DOCKER_HUB}/${params.Domain}:v${BUILD_NUMBER}"
+                DOCKER_HUB = "itmabo"
+                IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:v${BUILD_NUMBER}"
             }
             steps{
                 script {
                     if (params.Version != 'latest') {
-                        IMAGE_NAME = "${env.DOCKER_HUB}/${params.Domain}:${params.Version}"
+                        IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:${params.Version}"
                     }
                 }
                 echo 'Stage @Build@ begin -> '
@@ -48,13 +48,12 @@ pipeline{
                     if (params.Version != 'latest') {
                         VERSION = "${params.Version}"
                     }
-                    DOMAIN = "${params.Domain}"
                     NAMESPACE = "${params.Namespace}"
                 echo 'Stage @Deploy@ begin -> '
                 sh """
 
 					export VERSION=${VERSION}
-					export DOMAIN=${DOMAIN}
+					export DOMAIN=${env.DOMAIN}
 					export NAMESPACE=${NAMESPACE}
 
                     envsubst < deploy/bees-deploy-template.yaml > deploy.yaml
