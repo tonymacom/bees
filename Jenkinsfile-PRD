@@ -14,11 +14,6 @@ pipeline{
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
     }
     stages {
-        stage('Init') {
-          steps {
-            git branch: "refs/tags/${params.Version}", url: 'https://github.com/tonymacom/bees.git'
-          }
-        }
         stage('Build') {
             environment {
                 DOCKER_HUB = "itmabo"
