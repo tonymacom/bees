@@ -4,14 +4,13 @@ pipeline{
         DOCKER_HUB = "itmabo"
     }
     parameters {
-        gitParameter name: 'Version2',
+        gitParameter name: 'Version',
                      type: 'PT_BRANCH_TAG',
                      branchFilter: 'origin/(.*)',
-                     defaultValue: 'master',
+                     defaultValue: 'latest',
                      selectedValue: 'DEFAULT',
                      sortMode: 'DESCENDING_SMART',
                      description: 'Select your branch or tag.'
-        string(name: 'Version', defaultValue: 'latest', description: 'Current Release Version')
         string(name: 'Domain', defaultValue: 'bees', description: 'Domain Name')
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
     }
