@@ -4,10 +4,21 @@ pipeline{
         DOMAIN = "bees";
     }
     parameters {
-        string(name: 'Version', defaultValue: 'latest', description: 'release version')
+        gitParameter name: 'Version',
+                     type: 'PT_TAG',
+                     branchFilter: 'origin/(.*)',
+                     defaultValue: 'latest',
+                     selectedValue: 'DEFAULT',
+                     sortMode: 'DESCENDING_SMART',
+                     description: 'Select your release tag.'
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
     }
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: "refs/tags/${params.Version}", url: "https://github.com/tonymacom/bees.git"
+            }
+        }
         stage('Build') {
             environment {
                 DOCKER_HUB = "itmabo"
