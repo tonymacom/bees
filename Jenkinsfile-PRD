@@ -4,7 +4,7 @@ pipeline{
         DOMAIN = "bees";
     }
     parameters {
-        gitParameter name: 'Version',
+        gitParameter name: 'VERSION',
                      type: 'PT_TAG',
                      branchFilter: 'origin/(.*)',
                      defaultValue: 'latest',
@@ -21,8 +21,8 @@ pipeline{
             }
             steps{
                 script {
-                    if (params.Version != 'latest') {
-                        IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:${params.Version}"
+                    if (params.VERSION != 'latest') {
+                        IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:${params.VERSION}"
                     }
                 }
                 echo 'Stage @Build@ begin -> '
@@ -45,8 +45,8 @@ pipeline{
             }
             steps{
                 script {
-                    if (params.Version != 'latest') {
-                        VERSION = "${params.Version}"
+                    if (params.VERSION != 'latest') {
+                        VERSION = "${params.VERSION}"
                     }
                     NAMESPACE = "${params.Namespace}"
                 echo 'Stage @Deploy@ begin -> '
