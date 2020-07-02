@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wms
+  namespace: central
+  labels:
+    version: v4
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wms
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: wms
+        version: v4
+    spec:
+      containers:
+        - name: wms
+          image: 063035886041.dkr.ecr.us-east-2.amazonaws.com/wms:v4
+          imagePullPolicy: Always
+          env:
+            - name: CONFIG_PROFILE
+              value: central
+            - name: VERSION
+              value: v4
+          ports:
+            - name: main-port
+              containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+          livenessProbe:
+            httpGet:
+              path: /actuator/info
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/info
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 15
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "1000Mi"
+            limits:
+              cpu: "900m"
+              memory: "1500Mi"
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nodeclass
+                    operator: In
+                    values:
+                      - worker
+      tolerations:
+        - key: "node"
+          operator: "Equal"
+          value: worker
+          effect: "NoExecute"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wms
+  namespace: central
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: main-port
+  selector:
+    app: wms
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: wms
+  namespace: central
+spec:
+  hosts:
+    - wmsapi.ecnow.tech
+  gateways:
+    - ingressgateway.istio-system.svc.cluster.local
+  http:
+    - match:
+        - uri:
+            prefix: /wms
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: wms
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: wms-mesh
+  namespace: central
+spec:
+  hosts:
+    - wms
+  http:
+    - match:
+        - uri:
+            prefix: /wms
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: wms
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: wms
+  namespace: central
+spec:
+  host: wms
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        maxRequestsPerConnection: 10
+        http1MaxPendingRequests: 1024
+    outlierDetection:
+      http:
+        consecutiveErrors: 7
+        interval: 5m
+        baseEjectionTime: 15m

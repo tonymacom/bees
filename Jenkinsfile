@@ -16,6 +16,7 @@ pipeline{
             steps{
                 script {
                     if (params.Version != 'latest') {
+                        echo "------------------>${params.Version//.//}"
                         IMAGE_NAME = "${env.DOCKER_HUB}/${params.Domain}:${params.Version}"
                     }
                 }
