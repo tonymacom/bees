@@ -6,6 +6,7 @@ metadata:
 spec:
   replicas: 3
   strategy:
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 1 # 滚动发布时，启动2个实例，等成功后，kill掉2个旧实例，再继续滚动起2个，直到最后全部滚动升级完成。
 #      maxUnavailable: 1 # 滚动发布时，先杀掉3个旧实例，再启动3个新实例，直到最后滚动升级完成。
@@ -20,7 +21,7 @@ spec:
     spec:
       containers:
       - name: bees
-        image: itmabo/bees:v06
+        image: itmabo/bees:v1
         imagePullPolicy: Always
         ports:
         - name: main-port
