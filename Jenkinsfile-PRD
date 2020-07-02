@@ -4,7 +4,7 @@ pipeline{
         DOMAIN = "bees";
     }
     parameters {
-        gitParameter name: 'VERSION',
+        gitParameter name: 'Version',
                      type: 'PT_TAG',
                      branchFilter: 'origin/(.*)',
                      defaultValue: 'latest',
@@ -14,6 +14,11 @@ pipeline{
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
     }
     stages {
+        stage('Init') {
+          steps {
+            git branch: "refs/tags/${params.Version}", url: 'https://github.com/tonymacom/bees.git'
+          }
+        }
         stage('Build') {
             environment {
                 DOCKER_HUB = "itmabo"
@@ -21,8 +26,8 @@ pipeline{
             }
             steps{
                 script {
-                    if (params.VERSION != 'latest') {
-                        IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:${params.VERSION}"
+                    if (params.Version != 'latest') {
+                        IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:${params.Version}"
                     }
                 }
                 echo 'Stage @Build@ begin -> '
@@ -45,8 +50,8 @@ pipeline{
             }
             steps{
                 script {
-                    if (params.VERSION != 'latest') {
-                        VERSION = "${params.VERSION}"
+                    if (params.Version != 'latest') {
+                        VERSION = "${params.Version}"
                     }
                     NAMESPACE = "${params.Namespace}"
                 echo 'Stage @Deploy@ begin -> '
