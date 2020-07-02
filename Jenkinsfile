@@ -16,7 +16,8 @@ pipeline{
     stages {
         stage('Checkout') {
             steps {
-                git branch: "refs/tags/${params.Version}", url: "https://github.com/tonymacom/bees.git"
+                git url: "https://github.com/tonymacom/bees.git"
+                sh "git checkout refs/tags/${params.Version}"
             }
         }
         stage('Build') {
