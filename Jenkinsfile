@@ -4,6 +4,13 @@ pipeline{
         DOCKER_HUB = "itmabo"
     }
     parameters {
+        gitParameter name: 'Version2',
+                     type: 'PT_BRANCH_TAG',
+                     branchFilter: 'origin/(.*)',
+                     defaultValue: 'master',
+                     selectedValue: 'DEFAULT',
+                     sortMode: 'DESCENDING_SMART',
+                     description: 'Select your branch or tag.'
         string(name: 'Version', defaultValue: 'latest', description: 'Current Release Version')
         string(name: 'Domain', defaultValue: 'bees', description: 'Domain Name')
         string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
@@ -19,7 +26,6 @@ pipeline{
                         IMAGE_NAME = "${env.DOCKER_HUB}/${params.Domain}:${params.Version}"
                     }
                 }
-                echo "------------------>${params.Version//.//}"
                 echo 'Stage @Build@ begin -> '
                 sh """
                     mvn clean package -DskipTests -U
