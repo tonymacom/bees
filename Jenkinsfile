@@ -16,10 +16,10 @@ pipeline{
             steps{
                 script {
                     if (params.Version != 'latest') {
-                        echo "------------------>${params.Version//.//}"
                         IMAGE_NAME = "${env.DOCKER_HUB}/${params.Domain}:${params.Version}"
                     }
                 }
+                echo "------------------>${params.Version//.//}"
                 echo 'Stage @Build@ begin -> '
                 sh """
                     mvn clean package -DskipTests -U
