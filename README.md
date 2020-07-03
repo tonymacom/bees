@@ -1,5 +1,5 @@
 # bees
-simple web applicationa
+simple web application
 
 
 
@@ -7,6 +7,6 @@ simple web applicationa
 
 /request/info
 
-/request/times
+/error/500
 
-/request/times/reset
+/error/{status}
