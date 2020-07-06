@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        DOMAIN = "wms";
+        DOMAIN = "bees";
         GATEWAY_HOST = "wmsapi.ecnow.tech"
         GIT_URL = "https://github.com/tonymacom/bees.git";
         CREDENTIALS_ID = "sayweee-deploy"
