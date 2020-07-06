@@ -1,0 +1,80 @@
+pipeline{
+    agent any
+    environment {
+        DOMAIN = "wms";
+        GATEWAY_HOST = "wmsapi.ecnow.tech"
+        GIT_URL = "https://github.com/tonymacom/bees.git";
+        CREDENTIALS_ID = "sayweee-deploy"
+    }
+    parameters {
+        string(name: 'Version', defaultValue: 'latest', description: 'mob jenkins release')
+        string(name: 'Namespace', defaultValue: 'forest', description: 'Apply Namespace')
+        string(name: 'Replicas', defaultValue: '1', description: 'Number of Endpoints')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: "${env.GIT_URL}", credentialsId: "${env.CREDENTIALS_ID}"
+                sh "git checkout refs/tags/${params.Version}"
+            }
+        }
+
+        stage('Build') {
+            environment {
+                DOCKER_HUB = "063035886041.dkr.ecr.us-east-2.amazonaws.com"
+                IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:v${BUILD_NUMBER}"
+            }
+            steps{
+                script {
+                    if (params.Version != 'latest') {
+                        IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:${params.Version}"
+                    }
+                }
+                echo 'Stage @Build@ begin -> '
+                sh """
+                    mvn clean package -DskipTests -U
+                    \$(aws ecr get-login --no-include-email --region us-east-2)
+                    docker build -t ${IMAGE_NAME} .
+                    docker push ${IMAGE_NAME}
+                """
+            }
+        }
+        stage('Test') {
+            steps{
+                echo 'Stage @Test@ begin -> '
+                echo 'Skip Test Now'
+            }
+        }
+        stage('Deploy') {
+            environment {
+				VERSION = "v${BUILD_NUMBER}"
+            }
+            steps{
+                script {
+                    if (params.Version != 'latest') {
+                        VERSION = "${params.Version}"
+                    }
+                    NAMESPACE = "${params.Namespace}"
+                    REPLICAS = "${params.Replicas}"
+                    CONFIG_SERVICE_PASSWORD = "triple@123"
+                    CONFIG_PROFILE = "central"
+                echo 'Stage @Deploy@ begin -> '
+                sh """
+
+					export VERSION=${VERSION}
+					export NAMESPACE=${NAMESPACE}
+					export REPLICAS=${REPLICAS}
+                    export GATEWAY_HOST=${env.GATEWAY_HOST}
+                    export DOMAIN=${env.DOMAIN}
+
+                    envsubst < deploy-template.yaml > deploy.yaml
+                    echo "cat deploy.yaml --->>>"
+                    cat deploy.yaml
+                    echo "cat deploy.yaml ---<<<"
+                    kubectl apply -f deploy.yaml
+                """
+                }
+            }
+        }
+    }
+}

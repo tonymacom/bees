@@ -4,7 +4,7 @@ metadata:
   name: ${DOMAIN}
   namespace: ${NAMESPACE}
 spec:
-  replicas: 3
+  replicas: ${REPLICAS}
   selector:
     matchLabels:
       app: ${DOMAIN}
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ${DOMAIN}
-        image: itmabo/${DOMAIN}:${VERSION}
+        image: 063035886041.dkr.ecr.us-east-2.amazonaws.com/${DOMAIN}:${VERSION}
         imagePullPolicy: Always
         ports:
         - name: main-port
@@ -76,7 +76,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   hosts:
-  - wmsapi.ecnow.tech
+  - ${GATEWAY_HOST}
   gateways:
   - istio-system/ingressgateway
   http:
