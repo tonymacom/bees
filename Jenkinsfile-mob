@@ -67,7 +67,7 @@ pipeline{
                     export GATEWAY_HOST=${env.GATEWAY_HOST}
                     export DOMAIN=${env.DOMAIN}
 
-                    envsubst < bees-deploy-template.yaml > deploy.yaml
+                    envsubst < deploy/bees-deploy-template.yaml > deploy.yaml
                     echo "cat deploy.yaml --->>>"
                     cat deploy.yaml
                     echo "cat deploy.yaml ---<<<"
