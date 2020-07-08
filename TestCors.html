@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <script>
+        axios.defaults.headers.common['Authorization'] = "Bearer xxxx";
+        // axios.post('/user', {
+        //     firstName: 'Fred',
+        //     lastName: 'Flintstone'
+        // })
+        //     .then(function (response) {
+        //         console.log(response);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+        axios.get('http://xxxxxx/wms/transShipment/queryPoOnWayItems/7/14998')
+            .then(function (response) {
+                console.log("成功：",response);
+            })
+            .catch(function (error) {
+                console.log("失败：",error);
+            });
+    </script>
+</body>
+</html>
