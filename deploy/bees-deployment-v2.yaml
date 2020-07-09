@@ -1,11 +1,14 @@
-# 测试spec.selector.matchLabels下如有version 这个label匹配的话，不能使用同一个deploy name 滚动发布。
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bees
+  name: bees-v06
   namespace: forest
 spec:
   replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
   selector:
     matchLabels:
       app: bees
@@ -13,36 +16,109 @@ spec:
     metadata:
       labels:
         app: bees
-        version: v2
+        version: v06
     spec:
       containers:
-      - name: bees
-        image: itmabo/bees:v2
-        imagePullPolicy: Always
-        ports:
-        - name: main-port
-          containerPort: 8080
-        volumeMounts:
-        - mountPath: /home/log
-          name: log-volume
-        livenessProbe:
-          httpGet:
-            path: /actuator/info
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 3
-          successThreshold: 1
-          failureThreshold: 5
-        readinessProbe:
-          httpGet:
-            path: /actuator/info
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 3
-          successThreshold: 1
-          failureThreshold: 5
+        - name: bees
+          image: itmabo/bees:v06
+          imagePullPolicy: Always
+          ports:
+            - name: main-port
+              containerPort: 8080
+          volumeMounts:
+            - mountPath: /home/log
+              name: log-volume
+          livenessProbe:
+            httpGet:
+              path: /actuator/info
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/info
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
       volumes:
-      - name: log-volume
-        hostPath:
-          path: /home/log
-          type: DirectoryOrCreate
+        - name: log-volume
+          hostPath:
+            path: /home/log
+            type: DirectoryOrCreate
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bees
+  namespace: forest
+  labels:
+    app: bees
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: main-port
+  selector:
+    app: bees
+  type: ClusterIP
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bees
+  namespace: forest
+spec:
+  hosts:
+    - wmsapi.ecnow.tech
+  gateways:
+    - istio-system/ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /bees
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: bees
+            subset: main
+          weight: 100
+        - destination:
+            host: bees
+            subset: v06
+          weight: 0
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: bees
+  namespace: forest
+spec:
+  host: bees
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http2MaxRequests: 1000
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: 6
+      interval: 5s
+      baseEjectionTime: 5s
+  subsets:
+    - name: main
+      labels:
+        version: main
+    - name: v06
+      labels:
+        version: v06

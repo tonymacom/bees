@@ -4,20 +4,20 @@ metadata:
   name: bees
   namespace: forest
 spec:
-  replicas: 3
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1 # 滚动发布时，启动2个实例，等成功后，kill掉2个旧实例，再继续滚动起2个，直到最后全部滚动升级完成。
-#      maxUnavailable: 1 # 滚动发布时，先杀掉3个旧实例，再启动3个新实例，直到最后滚动升级完成。
+      maxSurge: 1
   selector:
     matchLabels:
       app: bees
+      version: main
   template:
     metadata:
       labels:
         app: bees
-        version: v1
+        version: main
     spec:
       containers:
       - name: bees
@@ -84,7 +84,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /bees
+        prefix: /tony_bees
     rewrite:
       uri: /
     route:
