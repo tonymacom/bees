@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: bees-lua
+  namespace: forest
+spec:
+  workloadLabels:
+    app: bees
+  filters:
+  - listenerMatch:
+      portNumber: 80
+      listenerType: SIDECAR_INBOUND # will match with the inbound listener for reviews:8080
+      listenerProtocol: HTTP
+    filterName: envoy.lua
+    filterType: HTTP
+    filterConfig:
+      inlineCode: |
+        function envoy_on_response(response_handle)
+            local cors_info = response_handle:headers():get("access-control-allow-origin")
+            if cors_info == nil then
+              response_handle:headers():add("access-control-allow-origin", "*")
+            else
+              response_handle:logInfo("Cors origin info->"..cors_info)
+            end
+        end
