@@ -1,7 +1,7 @@
 # bees
 simple web application
 
-
+主干Bees
 
 /name
 
@@ -10,3 +10,7 @@ simple web application
 /error/500
 
 /error/{status}
+
+
+/request/info  #返回一次请求所有的请求头
+
