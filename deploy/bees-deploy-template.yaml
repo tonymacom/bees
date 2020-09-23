@@ -18,11 +18,14 @@ spec:
         app: ${DOMAIN}
         version: ${VERSION}
     spec:
-      terminationGracePeriodSeconds: 60
       containers:
       - name: ${DOMAIN}
         image: itmabo/${DOMAIN}:${VERSION}
         imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command: [ "/bin/sleep", "60" ]
         ports:
         - name: main-port
           containerPort: 8080

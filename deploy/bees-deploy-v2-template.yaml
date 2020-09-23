@@ -19,10 +19,6 @@ spec:
       - name: bees
         image: itmabo/bees:v2
         imagePullPolicy: Always
-        lifecycle:
-          preStop:
-            exec:
-              command: [ "/bin/sleep", "60" ]
         ports:
         - name: main-port
           containerPort: 8080
