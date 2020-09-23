@@ -72,4 +72,26 @@ public class InfoController {
 		log.info("reset 0");
 		return ResponseEntity.ok("reset 0");
 	}
+
+	@GetMapping("/request/sleep/{time}")
+	public ResponseEntity<String> sleep(@PathVariable("time") Long time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok("success");
+	}
+
+	@GetMapping("/request/running/{time}")
+	public ResponseEntity<String> running(@PathVariable("time") Long time) {
+		Long start = System.currentTimeMillis();
+		while (true) {
+			Long end = System.currentTimeMillis();
+			if (end - start >= time * 1000) {
+				break;
+			}
+		}
+		return ResponseEntity.ok("success");
+	}
 }

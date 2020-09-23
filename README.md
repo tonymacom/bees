@@ -12,3 +12,7 @@ simple web application
 /request/times
 
 /request/times/reset
+
+/request/sleep/{time} # 线程睡眠 (单位: 秒)
+
+/request/running/{time} # 满线程运行 (单位: 秒)
