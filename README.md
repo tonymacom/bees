@@ -14,3 +14,6 @@ simple web application
 
 /request/info  #返回一次请求所有的请求头
 
+/request/sleep/{time} # 线程睡眠 (单位: 秒)
+
+/request/running/{time} # 满线程运行 (单位: 秒)
