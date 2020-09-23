@@ -75,10 +75,20 @@ public class InfoController {
 
 	@GetMapping("/request/sleep/{time}")
 	public ResponseEntity<String> sleep(@PathVariable("time") Long time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		Long start = System.currentTimeMillis();
+		int i = 0;
+		while (true) {
+			Long end = System.currentTimeMillis();
+			if (end - start >= time * 1000) {
+				break;
+			}
+			try {
+				System.out.println("i want sleep, " + (++i));
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} finally {
+			}
 		}
 		return ResponseEntity.ok("success");
 	}
