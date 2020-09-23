@@ -2,6 +2,7 @@ pipeline{
     agent any
     environment {
         DOMAIN = "bees";
+        GATEWAY_HOST = "wmsapi.ecnow.tech"
     }
     parameters {
         string(name: 'Version', defaultValue: 'latest', description: 'release version')
@@ -49,6 +50,7 @@ pipeline{
 					export VERSION=${VERSION}
 					export DOMAIN=${env.DOMAIN}
 					export NAMESPACE=${NAMESPACE}
+					export GATEWAY_HOST=${env.GATEWAY_HOST}
 
                     envsubst < deploy/bees-deploy-template.yaml > deploy.yaml
                     echo "cat deploy.yaml --->>>"
