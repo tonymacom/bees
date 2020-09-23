@@ -21,7 +21,7 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
       - name: ${DOMAIN}
-        image: 063035886041.dkr.ecr.us-east-2.amazonaws.com/${DOMAIN}:${VERSION}
+        image: itmabo/${DOMAIN}:${VERSION}
         imagePullPolicy: Always
         ports:
         - name: main-port
