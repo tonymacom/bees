@@ -7,6 +7,7 @@ pipeline{
     parameters {
         string(name: 'Version', defaultValue: 'latest', description: 'release version')
         string(name: 'Namespace', defaultValue: 'central', description: 'Apply Namespace')
+        string(name: 'Replicas', defaultValue: '3', description: 'Number of Endpoints')
     }
     stages {
         stage('Build') {
@@ -44,12 +45,14 @@ pipeline{
                         VERSION = "${params.Version}"
                     }
                     NAMESPACE = "${params.Namespace}"
+                    REPLICAS = "${params.Replicas}"
                 echo 'Stage @Deploy@ begin -> '
                 sh """
 
 					export VERSION=${VERSION}
 					export DOMAIN=${env.DOMAIN}
 					export NAMESPACE=${NAMESPACE}
+					export REPLICAS=${REPLICAS}
 					export GATEWAY_HOST=${env.GATEWAY_HOST}
 
                     envsubst < deploy/bees-deploy-template.yaml > deploy.yaml
