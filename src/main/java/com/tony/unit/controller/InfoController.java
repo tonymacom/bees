@@ -104,4 +104,21 @@ public class InfoController {
 		}
 		return ResponseEntity.ok("success");
 	}
+
+	@GetMapping("/request/headers")
+	public ResponseEntity<Object> headers(HttpServletRequest request) {
+
+		Enumeration<String> headerNames = request.getHeaderNames();
+		System.out.println("--------- headers ------------");
+		Map<String, Object> result = new HashMap<>();
+		while (headerNames.hasMoreElements()) {
+			String name = headerNames.nextElement();
+			String value = request.getHeader(name);
+			System.out.println("name : " + name + ", value: " + value);
+			result.put(name, value);
+		}
+		result.put("ip", request.getRemoteAddr());
+
+		return ResponseEntity.ok(result);
+	}
 }

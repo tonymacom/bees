@@ -7,7 +7,7 @@ pipeline{
     parameters {
         string(name: 'Version', defaultValue: 'latest', description: 'release version')
         string(name: 'Namespace', defaultValue: 'central', description: 'Apply Namespace')
-        string(name: 'Replicas', defaultValue: '3', description: 'Number of Endpoints')
+        string(name: 'Replicas', defaultValue: '1', description: 'Number of Endpoints')
     }
     stages {
         stage('Build') {
