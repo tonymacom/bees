@@ -18,7 +18,7 @@ spec:
         app: bees
         version: v1
     spec:
-      terminationGracePeriodSeconds: 60
+
       containers:
       - name: bees
         image: itmabo/bees:v1
