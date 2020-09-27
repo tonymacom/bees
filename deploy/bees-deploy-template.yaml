@@ -18,7 +18,7 @@ spec:
         app: ${DOMAIN}
         version: ${VERSION}
     spec:
-      terminationGracePeriodSeconds: 60
+      terminationGracePeriodSeconds: 10
       containers:
       - name: ${DOMAIN}
         image: itmabo/${DOMAIN}:${VERSION}
@@ -26,7 +26,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: [ "/bin/sleep", "60" ]
+              command: [ "/bin/sleep", "10" ]
         ports:
         - name: main-port
           containerPort: 8080
