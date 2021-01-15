@@ -67,6 +67,6 @@ spec:
     targetPort: main-port
   selector:
     app: bees
-  type: ClusterIP
+  type: NodePort
 
 ---
