@@ -1,4 +1,9 @@
+
 #### BookInfo Application Testing Guide
+
+### 测试地址
+  https://www.katacoda.com/courses/istio/deploy-istio-on-kubernetes
+
 
 ```sh
 // 下载最新istio 1.5.4
