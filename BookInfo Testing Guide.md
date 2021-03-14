@@ -1,11 +1,16 @@
-
 ### BookInfo Application Testing Guide
 
 #### 测试地址
-  https://www.katacoda.com/courses/istio/deploy-istio-on-kubernetes
 
+https://www.katacoda.com/courses/istio/deploy-istio-on-kubernetes
+
+#### BookInfo Application 部署文件地址:
+
+https://github.com/istio/istio/tree/1.5.4/samples/bookinfo
 
 ```sh
+
+
 // 下载istio 1.5.4
 $ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.5.4 TARGET_ARCH=x86_64 sh -
 
@@ -21,7 +26,7 @@ $ istioctl manifest apply --set profile=demo
 // 查看istio-system 下 isito的组件
 $ kubectl get svc -n istio-system -o name
 
-// 将 default 命名空间设置为 istio 自动注入 sidecar
+// 设置 default 命名空间为 istio 自动注入 sidecar
 $ kubectl label namespace default istio-injection=enabled
 
 // 部署bookinfo服务 在线文件地址 : https://github.com/istio/istio/blob/1.5.4/samples/bookinfo/platform/kube/bookinfo.yaml
@@ -33,18 +38,13 @@ $ kubectl get svc,po
 // 检测 productpage服务是否正常启动
 $ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
 
-curl -sS productpage:9080/productpage1 | grep -o "<title>.*</title>"
-curl productpage:9080/productpage1 | grep -o "<title>.*</title>"
-curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
-
-
-// 部署gateway , 是的mesh外部可以访问
+// 部署gateway , 使得 mesh 外部可以访问
 $ kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
 
 // 查看gateway
 $ kubectl get gateway
 
-// 访问productpage页面, 发现reviews服务的三个版本依次被调用
+// 点击dashboard Tab 页, 在地址后追加 /productpage 访问, 发现reviews服务的三个版本依次被调用
 
 // 查看Pod的Label
 $ kubectl get po --show-labels | grep reviews
@@ -64,5 +64,12 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
 $ kubectl edit vs reviews -o yaml
 
 //保存后刷新页面发现流量全部被转发到了v2版本.
+
+// 修改 jason 用户登录后访问 v2 版本的 reviews 服务, 未登录则访问v3版本的 reviews 服务.
+$ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-jason-v2-v3.yaml
+
+// 点击页面中的 Sign in , 使用 jason 用户登录(密码为空), 发现调用了 v3 版本的 reviews 服务. 
+
+// 点击 Sign out 退出登录, 发现调用的是 v2 版本的 reviews 服务.
 ```
 
