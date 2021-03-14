@@ -6,7 +6,7 @@
 
 
 ```sh
-// 下载最新istio 1.5.4
+// 下载istio 1.5.4
 $ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.5.4 TARGET_ARCH=x86_64 sh -
 
 // 打开istio目录
