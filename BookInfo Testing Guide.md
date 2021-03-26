@@ -46,6 +46,9 @@ $ kubectl get gateway
 
 // 点击dashboard Tab 页, 在地址后追加 /productpage 访问, 发现reviews服务的三个版本依次被调用
 
+// 查看 kube-svc views 的定义
+$ kubectl get svc reviews -oyaml
+
 // 查看Pod的Label
 $ kubectl get po --show-labels | grep reviews
 
