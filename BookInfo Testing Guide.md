@@ -49,11 +49,11 @@ $ kubectl get gateway
 // 查看 kube-svc views 的定义
 $ kubectl get svc reviews -oyaml
 
-// 查看Pod的Label
-$ kubectl get po --show-labels | grep reviews
-
 // 查看reviews服务会转发到哪几个review实例中去.
 $ kubectl get svc reviews -o jsonpath='{.spec.selector}'
+
+// 查看Pod的Label
+$ kubectl get po --show-labels | grep reviews
 
 // 初始化DestinationRule
 $ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
