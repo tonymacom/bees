@@ -78,7 +78,7 @@ metadata:
   namespace: central
 spec:
   hosts:
-  - wmsapi.ecnow.tech
+  - api.tb1.sayweee.net
   gateways:
   - istio-system/ingressgateway
   http:
