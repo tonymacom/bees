@@ -16,6 +16,7 @@
 
 /*/.gitignore
 */bin/
+*/target/
 target/classes/
 target/*.original
 target/generated-sources/
