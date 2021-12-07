@@ -22,5 +22,12 @@ https://www.katacoda.com/courses/container-runtimes/building-container-images-wi
 ### 第二步: 编写部署编排文件
 
 ```
-1. 编写 bees-deploy.yml
+1. 编写 bees-deploy.yaml
 ```
+
+### 第三步: 执行编排文件
+```
+kubectl apply -f bees-deploy.yaml
+```
+
+### 第四步: 访问测试

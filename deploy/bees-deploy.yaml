@@ -18,7 +18,6 @@ spec:
         app: bees
         version: v1
     spec:
-
       containers:
       - name: bees
         image: itmabo/bees:latest
