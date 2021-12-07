@@ -21,7 +21,7 @@ spec:
 
       containers:
       - name: bees
-        image: itmabo/bees:v1
+        image: itmabo/bees:latest
         imagePullPolicy: Always
         ports:
         - name: main-port
