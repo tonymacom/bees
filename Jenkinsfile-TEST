@@ -10,7 +10,7 @@ pipeline{
     stages {
         stage('Build') {
             environment {
-                DOCKER_HUB = "itmabo"
+                DOCKER_HUB = "551230544614.dkr.ecr.us-east-2.amazonaws.com"
                 IMAGE_NAME = "${env.DOCKER_HUB}/${env.DOMAIN}:v${BUILD_NUMBER}"
             }
             steps{
@@ -22,6 +22,7 @@ pipeline{
                 echo 'Stage @Build@ begin -> '
                 sh """
                     mvn clean package -DskipTests -U
+                    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 551230544614.dkr.ecr.us-east-2.amazonaws.com
                     docker build -t ${IMAGE_NAME} .
                     docker push ${IMAGE_NAME}
                 """
