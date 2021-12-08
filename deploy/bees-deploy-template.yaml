@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ${DOMAIN}
-        image: 551230544614.dkr.ecr.us-east-2.amazonaws.com/${DOMAIN}:${VERSION}
+        image: itmabo/bees:latest
         imagePullPolicy: Always
         ports:
         - name: main-port

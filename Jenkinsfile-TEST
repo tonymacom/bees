@@ -20,12 +20,6 @@ pipeline{
                     }
                 }
                 echo 'Stage @Build@ begin -> '
-                sh """
-                    mvn clean package -DskipTests -U
-                    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 551230544614.dkr.ecr.us-east-2.amazonaws.com
-                    docker build -t ${IMAGE_NAME} .
-                    docker push ${IMAGE_NAME}
-                """
             }
         }
         stage('Test') {
