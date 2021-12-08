@@ -40,7 +40,7 @@ pipeline{
                     NAMESPACE = "${params.Namespace}"
                     echo 'Stage @Deploy@ begin -> '
                     sh """
-                        kubectl apply -f bees-deploy.yaml
+                        kubectl apply -f deploy/bees-deploy.yaml
                     """
                 }
             }
