@@ -29,7 +29,7 @@ public class InfoController {
 	@GetMapping("/name")
 	public ResponseEntity<String> id() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("name","weng weng for deploy step!!");
+		result.put("name","weng weng for deploy step nn!!");
 		return ResponseEntity.ok(JSON.toJSONString(result));
 	}
 
