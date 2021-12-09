@@ -1,7 +1,7 @@
 # bees
 simple web application
 
-主干Bees
+deploy_step_demo 分支 Bees , 用来演示如何在集群内搭建一个服务
 
 /name
 
