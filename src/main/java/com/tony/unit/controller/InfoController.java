@@ -30,6 +30,8 @@ public class InfoController {
 	public ResponseEntity<String> id() {
 		Map<String, Object> result = new HashMap<>();
 		result.put("name","wengweng");
+
+
 		return ResponseEntity.ok(JSON.toJSONString(result));
 	}
 
