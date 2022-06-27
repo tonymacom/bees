@@ -37,6 +37,7 @@ public class InfoController {
 
 	@GetMapping("/error/500")
 	public ResponseEntity<String> error500() throws Exception {
+		
 		throw new Exception();
 	}
 
