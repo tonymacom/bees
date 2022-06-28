@@ -72,4 +72,8 @@ public class InfoController {
 		log.info("reset 0");
 		return ResponseEntity.ok("reset 0");
 	}
+
+	public static void main(String[] args) {
+		System.out.println("Test sonar check");
+	}
 }
