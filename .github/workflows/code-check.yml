@@ -1,4 +1,4 @@
-name: CI-Check
+name: code-check
 on:
   push:
     branches:
@@ -6,8 +6,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  build:
-    name: Build
+  maven_sonar_check:
+    name: Maven_Sonar_Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
