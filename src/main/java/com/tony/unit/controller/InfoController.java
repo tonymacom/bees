@@ -115,4 +115,8 @@ public class InfoController {
 
 		return ResponseEntity.ok(result);
 	}
+
+	public static void main(String[] args) {
+		System.out.println("quantity test");
+	}
 }
