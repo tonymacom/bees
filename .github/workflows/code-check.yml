@@ -27,7 +27,6 @@ jobs:
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
-          restore-keys: ${{ runner.os }}-m2
       - name: Maven compile code
         run: mvn clean install
       - name: SonarQube Scan
