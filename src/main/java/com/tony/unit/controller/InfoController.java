@@ -117,7 +117,6 @@ public class InfoController {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("quantity test");
-		System.out.println("quantity test for cache 2  ");
+		
 	}
 }
