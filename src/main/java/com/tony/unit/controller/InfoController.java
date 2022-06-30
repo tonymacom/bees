@@ -117,6 +117,6 @@ public class InfoController {
 	}
 
 	public static void main(String[] args) {
-		
+
 	}
 }
