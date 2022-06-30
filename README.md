@@ -1,6 +1,10 @@
 # bees
 simple web application
 
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/tonymacom/bees?logo=github)
+![Workflow](https://github.com/tonymacom/bees/actions/workflows/code-check.yml/badge.svg)
+
+
 主干Bees
 
 /name
@@ -20,4 +24,5 @@ simple web application
 
 request/headers # 一次请求的所有header. 
 
-Sonar 测试
+Sonar 测试 
+1. quantity 测试.

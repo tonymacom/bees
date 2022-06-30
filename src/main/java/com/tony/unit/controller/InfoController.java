@@ -37,6 +37,7 @@ public class InfoController {
 
 	@GetMapping("/error/500")
 	public ResponseEntity<String> error500() throws Exception {
+		
 		throw new Exception();
 	}
 
@@ -113,5 +114,9 @@ public class InfoController {
 		result.put("remote addr : ", request.getRemoteAddr());
 
 		return ResponseEntity.ok(result);
+	}
+
+	public static void main(String[] args) {
+		
 	}
 }

@@ -5,7 +5,7 @@
     <artifactId>bees</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>bees</name>
-    <description>bees microservice</description>
+    <description>bees microservice for sonar</description>
 
 	<parent>
         <groupId>org.springframework.boot</groupId>
@@ -48,6 +48,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
         </dependency>
 
         <dependency>
