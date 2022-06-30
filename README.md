@@ -1,6 +1,10 @@
 # bees
 simple web application
 
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/tonymacom/bees?logo=github)
+![Workflow](https://github.com/tonymacom/bees/actions/workflows/code-check.yml/badge.svg)
+
+
 主干Bees
 
 /name
