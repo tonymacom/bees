@@ -18,13 +18,13 @@ jobs:
           java-version: 8      # 项目使用的jdk版本
           cache: 'maven'
           distribution: 'temurin'
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
       - name: Cache Maven packages
         uses: actions/cache@v1
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
+          key: setup-java-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
       - name: Cache SonarQube packages
         uses: actions/cache@v1
         with:
