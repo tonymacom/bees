@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping
@@ -31,6 +35,40 @@ public class InfoController {
 		Map<String, Object> result = new HashMap<>();
 		result.put("name","wengweng");
 
+		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+
+
+
+//		System.out.println(JSON.toJSONString(requestAttributes));
+		Thread thread = new Thread(() -> {
+
+//			requestAttributes
+
+			String jsonString = JSON.toJSONString(requestAttributes);
+			System.out.println(jsonString);
+
+			RequestContextHolder.setRequestAttributes(requestAttributes);
+			RequestAttributes requestAttributes1 = RequestContextHolder.getRequestAttributes();
+			try {
+				RequestAttributes childRequestData = requestAttributes1;
+				System.out.println(Thread.currentThread().getId());
+				System.out.println(((ServletRequestAttributes) childRequestData).getRequest().getRequestURI());
+				Thread.sleep(5000);
+				System.out.println(Thread.currentThread().getId());
+				System.out.println(((ServletRequestAttributes) childRequestData).getRequest().getRequestURI());
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+
+//			System.out.println(requestAttributes1.getSessionId());
+
+//			RequestAttributes requestAttributes2 = RequestContextHolder.currentRequestAttributes();
+//			System.out.println(JSON.toJSONString(requestAttributes2));
+		});
+
+		thread.start();
+
+		System.out.println("AaaaAaaaaa");
 
 		return ResponseEntity.ok(JSON.toJSONString(result));
 	}
@@ -58,6 +96,16 @@ public class InfoController {
 		}
 
 		return ResponseEntity.ok(JSON.toJSONString(result));
+	}
+
+	public static void main(String[] args) {
+		List<String> dates = new ArrayList<>();
+
+		dates.addAll(Stream.iterate(LocalDate.now(), d -> d.plusDays(1)).limit(14).map(LocalDate::toString).collect(Collectors.toList()));
+		System.out.println(dates);
+
+
+
 	}
 
 	@GetMapping("/request/times")
